@@ -12,4 +12,4 @@ class Settings(BaseSettings):
     coda_base_url: str = "https://coda.io/apis/v1"
 
 
-settings = Settings()
+settings = Settings(**{})  # pyright: ignore[reportUnknownArgumentType]

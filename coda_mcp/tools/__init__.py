@@ -1,4 +1,5 @@
 from fastmcp import FastMCP
+
 from .docs import register as register_docs
 from .pages import register as register_pages
 from .tables import register as register_tables
