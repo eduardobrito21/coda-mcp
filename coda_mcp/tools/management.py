@@ -21,9 +21,7 @@ def register(mcp: FastMCP) -> None:
     async def list_folders(workspace_id: str = "") -> list[FolderItem]:
         """List all folders in the workspace. Useful for finding folder IDs when creating docs."""
         query = (
-            FoldersListQuery.model_validate({"workspaceId": workspace_id})
-            if workspace_id
-            else None
+            FoldersListQuery.model_validate({"workspaceId": workspace_id}) if workspace_id else None
         )
         data = await coda_client.folders.list_folders(query)
         return data.items

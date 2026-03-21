@@ -4,6 +4,7 @@ import httpx
 
 from coda_mcp.config import Settings, settings
 
+from .automations import AutomationsClient
 from .common import CodaRequestMixin
 from .doc_structure import DocStructureClient
 from .docs import DocsClient
@@ -11,6 +12,7 @@ from .folders import FoldersClient
 from .formulas_controls import FormulasControlsClient
 from .miscellaneous import MiscellaneousClient
 from .tables import TablesClient
+from .workspaces import WorkspacesClient
 
 
 class CodaClient(CodaRequestMixin):
@@ -55,6 +57,14 @@ class CodaClient(CodaRequestMixin):
     @cached_property
     def miscellaneous(self) -> MiscellaneousClient:
         return MiscellaneousClient(http=self.http, base_url=self.base_url)
+
+    @cached_property
+    def automations(self) -> AutomationsClient:
+        return AutomationsClient(http=self.http, base_url=self.base_url)
+
+    @cached_property
+    def workspaces(self) -> WorkspacesClient:
+        return WorkspacesClient(http=self.http, base_url=self.base_url)
 
     async def aclose(self):
         await self.http.aclose()

@@ -1,5 +1,6 @@
 from fastmcp import FastMCP
 
+from .automations import register as register_automations
 from .creation import register as register_creation
 from .docs import register as register_docs
 from .management import register as register_management
@@ -15,3 +16,4 @@ def register_tools(mcp: FastMCP) -> None:
     register_structure(mcp)
     register_creation(mcp)
     register_management(mcp)
+    register_automations(mcp)

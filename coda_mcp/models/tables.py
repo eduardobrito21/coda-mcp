@@ -101,3 +101,28 @@ class RowDeleteQueuedResponse(BaseModel):
 
     request_id: str = Field(alias="requestId")
     id: str
+
+
+class RowUpdateBody(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    row: RowEdit
+
+
+class RowsDeleteBody(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    row_ids: list[str] = Field(alias="rowIds")
+
+
+class RowsDeleteQueuedResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    request_id: str = Field(alias="requestId")
+    row_ids: list[str] = Field(alias="rowIds")
+
+
+class PushButtonQueuedResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    request_id: str = Field(alias="requestId")

@@ -39,7 +39,9 @@ class MiscellaneousClient(CodaRequestMixin):
         response.raise_for_status()
         return validate_pydantic(WhoamiResponse, response.json())
 
-    async def get_resolve_browser_link(self, query: ResolveBrowserLinkQuery) -> ResolveBrowserLinkResponse:
+    async def get_resolve_browser_link(
+        self, query: ResolveBrowserLinkQuery
+    ) -> ResolveBrowserLinkResponse:
         response = await self.http.get(
             self.url("/resolveBrowserLink"),
             params=self.query_dict(query),
@@ -54,7 +56,9 @@ class MiscellaneousClient(CodaRequestMixin):
         response.raise_for_status()
         return validate_pydantic(MutationStatusResponse, response.json())
 
-    async def get_doc_analytics(self, query: DocAnalyticsListQuery | None = None) -> DocAnalyticsListResponse:
+    async def get_doc_analytics(
+        self, query: DocAnalyticsListQuery | None = None
+    ) -> DocAnalyticsListResponse:
         response = await self.http.get(
             self.url("/analytics/docs"),
             params=self.query_dict(query),
@@ -85,7 +89,9 @@ class MiscellaneousClient(CodaRequestMixin):
         response.raise_for_status()
         return validate_pydantic(DocAnalyticsSummaryResponse, response.json())
 
-    async def get_pack_analytics(self, query: PackAnalyticsListQuery | None = None) -> PackAnalyticsListResponse:
+    async def get_pack_analytics(
+        self, query: PackAnalyticsListQuery | None = None
+    ) -> PackAnalyticsListResponse:
         response = await self.http.get(
             self.url("/analytics/packs"),
             params=self.query_dict(query),

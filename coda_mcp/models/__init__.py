@@ -13,6 +13,7 @@ from .analytics import (
     PageAnalyticsListQuery,
     PageAnalyticsListResponse,
 )
+from .automations import TriggerAutomationBody, TriggerAutomationResponse
 from .common import ListEnvelope
 from .docs import (
     AclMetadataResponse,
@@ -87,21 +88,30 @@ from .pages import (
 from .tables import (
     ColumnListItem,
     ColumnsListResponse,
+    PushButtonQueuedResponse,
     RowCellEdit,
     RowDeleteQueuedResponse,
     RowEdit,
     RowListItem,
+    RowsDeleteBody,
+    RowsDeleteQueuedResponse,
     RowsListResponse,
     RowsUpsertBody,
     RowsUpsertQuery,
     RowsUpsertQueuedResponse,
+    RowUpdateBody,
     TableListItem,
     TableRowsQuery,
     TablesListResponse,
 )
 from .tools import CodaCell, CodaDoc, CodaPage, CodaRow, UpsertRowInput
+from .workspaces import WorkspaceItem, WorkspacesListResponse
 
 __all__ = [
+    "TriggerAutomationBody",
+    "TriggerAutomationResponse",
+    "WorkspaceItem",
+    "WorkspacesListResponse",
     "AclMetadataResponse",
     "AclSettingsResponse",
     "AddPermissionBody",
@@ -179,13 +189,18 @@ __all__ = [
     "ResolveBrowserLinkResponse",
     "ResolvedResource",
     "RowCellEdit",
+    "PushButtonQueuedResponse",
+    "RowCellEdit",
     "RowDeleteQueuedResponse",
     "RowEdit",
     "RowListItem",
+    "RowsDeleteBody",
+    "RowsDeleteQueuedResponse",
     "RowsListResponse",
     "RowsUpsertBody",
     "RowsUpsertQueuedResponse",
     "RowsUpsertQuery",
+    "RowUpdateBody",
     "TableListItem",
     "TableRowsQuery",
     "TablesListResponse",
