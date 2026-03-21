@@ -5,11 +5,17 @@ import httpx
 
 from coda_mcp.models import (
     ColumnsListResponse,
+    PushButtonQueuedResponse,
     RowDeleteQueuedResponse,
+    RowListItem,
+    RowsDeleteBody,
+    RowsDeleteQueuedResponse,
     RowsListResponse,
     RowsUpsertBody,
     RowsUpsertQuery,
     RowsUpsertQueuedResponse,
+    RowUpdateBody,
+    TableListItem,
     TableRowsQuery,
     TablesListResponse,
 )
@@ -76,6 +82,57 @@ class TablesClient(CodaRequestMixin):
         response.raise_for_status()
         return validate_pydantic(RowsUpsertQueuedResponse, response.json())
 
+    async def get_table(self, doc_id: str, table_id: str) -> TableListItem:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        response = await self.http.get(self.url(f"/docs/{d}/tables/{t}"))
+        response.raise_for_status()
+        return validate_pydantic(TableListItem, response.json())
+
+    async def get_row(self, doc_id: str, table_id: str, row_id: str) -> RowListItem:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        r = self._seg(row_id)
+        response = await self.http.get(
+            self.url(f"/docs/{d}/tables/{t}/rows/{r}"),
+            params={"valueFormat": "simpleWithArrays"},
+        )
+        response.raise_for_status()
+        return validate_pydantic(RowListItem, response.json())
+
+    async def update_row(
+        self,
+        doc_id: str,
+        table_id: str,
+        row_id: str,
+        body: RowUpdateBody,
+    ) -> RowDeleteQueuedResponse:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        r = self._seg(row_id)
+        response = await self.http.put(
+            self.url(f"/docs/{d}/tables/{t}/rows/{r}"),
+            json=body.model_dump(by_alias=True, exclude_none=True),
+        )
+        response.raise_for_status()
+        return validate_pydantic(RowDeleteQueuedResponse, response.json())
+
+    async def delete_rows(
+        self,
+        doc_id: str,
+        table_id: str,
+        body: RowsDeleteBody,
+    ) -> RowsDeleteQueuedResponse:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        response = await self.http.request(
+            "DELETE",
+            self.url(f"/docs/{d}/tables/{t}/rows"),
+            json=body.model_dump(by_alias=True),
+        )
+        response.raise_for_status()
+        return validate_pydantic(RowsDeleteQueuedResponse, response.json())
+
     async def delete_table_row(
         self,
         doc_id: str,
@@ -90,3 +147,20 @@ class TablesClient(CodaRequestMixin):
         )
         response.raise_for_status()
         return validate_pydantic(RowDeleteQueuedResponse, response.json())
+
+    async def push_button(
+        self,
+        doc_id: str,
+        table_id: str,
+        row_id: str,
+        column_id: str,
+    ) -> PushButtonQueuedResponse:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        r = self._seg(row_id)
+        c = self._seg(column_id)
+        response = await self.http.post(
+            self.url(f"/docs/{d}/tables/{t}/rows/{r}/buttons/{c}"),
+        )
+        response.raise_for_status()
+        return validate_pydantic(PushButtonQueuedResponse, response.json())
