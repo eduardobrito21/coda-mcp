@@ -29,10 +29,7 @@ def register(mcp: FastMCP) -> None:
             row_q["query"] = query
         params = TableRowsQuery.model_validate(row_q)
         data = await coda_client.tables.get_table_rows(doc_id, table_id, params)
-        return [
-            CodaRow(id=r.id, name=r.name, values=r.values)
-            for r in data.items
-        ]
+        return [CodaRow(id=r.id, name=r.name, values=r.values) for r in data.items]
 
     @mcp.tool()
     async def upsert_row(
@@ -49,10 +46,7 @@ def register(mcp: FastMCP) -> None:
             {
                 "rows": [
                     {
-                        "cells": [
-                            {"column": c.column, "value": c.value}
-                            for c in cells
-                        ],
+                        "cells": [{"column": c.column, "value": c.value} for c in cells],
                     },
                 ],
                 "keyColumns": key_columns or [],

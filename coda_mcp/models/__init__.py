@@ -71,8 +71,10 @@ from .misc import (
     WhoamiResponse,
 )
 from .pages import (
+    CreatePageBody,
     PageContent,
     PageContentUpdate,
+    PageCreateCanvas,
     PageExportBeginResponse,
     PageExportRequest,
     PageExportStatusResponse,
@@ -83,6 +85,8 @@ from .pages import (
     PutPageBody,
 )
 from .tables import (
+    ColumnListItem,
+    ColumnsListResponse,
     RowCellEdit,
     RowDeleteQueuedResponse,
     RowEdit,
@@ -91,7 +95,9 @@ from .tables import (
     RowsUpsertBody,
     RowsUpsertQuery,
     RowsUpsertQueuedResponse,
+    TableListItem,
     TableRowsQuery,
+    TablesListResponse,
 )
 from .tools import CodaCell, CodaDoc, CodaPage, CodaRow, UpsertRowInput
 
@@ -107,10 +113,13 @@ __all__ = [
     "CodaPage",
     "CodaRow",
     "ControlDetail",
+    "ColumnListItem",
+    "ColumnsListResponse",
     "ControlListItem",
     "ControlsListQuery",
     "ControlsListResponse",
     "CreateDocBody",
+    "CreatePageBody",
     "CreateFolderBody",
     "DeleteFolderResult",
     "DeletePermissionResult",
@@ -146,6 +155,7 @@ __all__ = [
     "PageAnalyticsListResponse",
     "PageContent",
     "PageContentUpdate",
+    "PageCreateCanvas",
     "PageExportBeginResponse",
     "PageExportRequest",
     "PageExportStatusResponse",
@@ -176,7 +186,9 @@ __all__ = [
     "RowsUpsertBody",
     "RowsUpsertQueuedResponse",
     "RowsUpsertQuery",
+    "TableListItem",
     "TableRowsQuery",
+    "TablesListResponse",
     "UnpublishResult",
     "UpdateFolderBody",
     "UpsertRowInput",

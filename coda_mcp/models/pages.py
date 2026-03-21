@@ -26,6 +26,26 @@ class PageContentUpdate(BaseModel):
     canvas_content: PageContent = Field(alias="canvasContent")
 
 
+class PageCreateCanvas(BaseModel):
+    """OpenAPI ``PageCreateContent`` branch for a canvas page (``type: canvas``)."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    type: Literal["canvas"] = "canvas"
+    canvas_content: PageContent = Field(alias="canvasContent")
+
+
+class CreatePageBody(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str
+    subtitle: str | None = None
+    icon_name: str | None = Field(None, alias="iconName")
+    image_url: str | None = Field(None, alias="imageUrl")
+    parent_page_id: str | None = Field(None, alias="parentPageId")
+    page_content: PageCreateCanvas | None = Field(None, alias="pageContent")
+
+
 class PagesListQuery(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 

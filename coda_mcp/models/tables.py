@@ -3,6 +3,38 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, JsonValue
 from .common import ListEnvelope
 
 
+class TableListItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    id: str
+    type: str = "table"
+    name: str
+    table_type: str | None = Field(None, alias="tableType")
+    row_count: int | None = Field(None, alias="rowCount")
+    href: str | None = None
+    browser_link: HttpUrl | None = Field(None, alias="browserLink")
+
+
+class TablesListResponse(ListEnvelope):
+    items: list[TableListItem]
+
+
+class ColumnListItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    id: str
+    type: str = "column"
+    name: str
+    href: str | None = None
+    calculated: bool | None = None
+    format: dict[str, JsonValue] | None = None
+    display: bool | None = None
+
+
+class ColumnsListResponse(ListEnvelope):
+    items: list[ColumnListItem]
+
+
 class TableRowsQuery(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 

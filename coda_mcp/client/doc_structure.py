@@ -5,6 +5,7 @@ from urllib.parse import quote
 import httpx
 
 from coda_mcp.models import (
+    CreatePageBody,
     PageExportBeginResponse,
     PageExportRequest,
     PageExportStatusResponse,
@@ -40,6 +41,25 @@ class DocStructureClient(CodaRequestMixin):
         )
         response.raise_for_status()
         return validate_pydantic(PagesListResponse, response.json())
+
+    async def create_page(
+        self,
+        doc_id: str,
+        body: CreatePageBody,
+    ) -> PageMutationQueuedResponse:
+        d = quote(doc_id, safe="")
+        response = await self.http.post(
+            self.url(f"/docs/{d}/pages"),
+            json=body.model_dump(by_alias=True, exclude_none=True),
+        )
+        response.raise_for_status()
+        return validate_pydantic(PageMutationQueuedResponse, response.json())
+
+    async def delete_page(self, doc_id: str, page_id: str) -> None:
+        d = quote(doc_id, safe="")
+        p = self._page_seg(page_id)
+        response = await self.http.delete(self.url(f"/docs/{d}/pages/{p}"))
+        response.raise_for_status()
 
     async def begin_page_export(
         self,

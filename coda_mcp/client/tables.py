@@ -4,12 +4,14 @@ from urllib.parse import quote
 import httpx
 
 from coda_mcp.models import (
+    ColumnsListResponse,
     RowDeleteQueuedResponse,
     RowsListResponse,
     RowsUpsertBody,
     RowsUpsertQuery,
     RowsUpsertQueuedResponse,
     TableRowsQuery,
+    TablesListResponse,
 )
 from coda_mcp.validation import validate_pydantic
 
@@ -28,6 +30,19 @@ class TablesClient(CodaRequestMixin):
 
     def _seg(self, table_or_row_id: str) -> str:
         return quote(table_or_row_id, safe="")
+
+    async def list_tables(self, doc_id: str) -> TablesListResponse:
+        d = self._doc(doc_id)
+        response = await self.http.get(self.url(f"/docs/{d}/tables"))
+        response.raise_for_status()
+        return validate_pydantic(TablesListResponse, response.json())
+
+    async def list_columns(self, doc_id: str, table_id: str) -> ColumnsListResponse:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        response = await self.http.get(self.url(f"/docs/{d}/tables/{t}/columns"))
+        response.raise_for_status()
+        return validate_pydantic(ColumnsListResponse, response.json())
 
     async def get_table_rows(
         self,
