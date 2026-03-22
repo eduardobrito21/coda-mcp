@@ -6,24 +6,23 @@ from fastmcp.server.dependencies import get_http_headers
 
 from coda_mcp.config import settings
 
-__all__ = ["CodaApiKeyDependency", "Depends", "get_coda_api_key"]
-
 
 def get_coda_api_key() -> str:
-    """Resolve the Coda API key: MCP ``Authorization: Bearer``, else ``CODA_API_KEY``."""
-    headers = get_http_headers(include={"authorization"})
-    auth = headers.get("authorization", "")
-    token = auth.removeprefix("Bearer ").strip()
+    """Resolve the Coda API key.
 
-    if token:
-        return token
+    HTTP: read ``X-Coda-Api-Key`` (not ``Authorization``, which the platform may use).
+
+    Stdio / no request: use ``CODA_API_KEY`` from the environment.
+    """
+    headers = get_http_headers()
+    from_header = headers.get("x-coda-api-key", "").strip()
+    if from_header:
+        return from_header
 
     if settings.coda_api_key is not None:
         return settings.coda_api_key.get_secret_value()
 
-    raise ToolError(
-        "No Coda API key found. Set CODA_API_KEY (local) or send Authorization: Bearer <key> on the MCP request (cloud)."
-    )
+    raise ToolError("No Coda API key found")
 
 
 # Shared ``Depends`` instance — use as: ``coda_api_key: str = CodaApiKeyDependency``
