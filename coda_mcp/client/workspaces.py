@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models.workspaces import WorkspaceItem, WorkspacesListResponse
 from coda_mcp.validation import validate_pydantic
 
@@ -21,7 +22,7 @@ class WorkspacesClient(CodaRequestMixin):
             self.url("/workspaces"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(WorkspacesListResponse, response.json())
 
     async def get_workspace(self, workspace_id: str, *, api_key: str) -> WorkspaceItem:
@@ -30,5 +31,5 @@ class WorkspacesClient(CodaRequestMixin):
             self.url(f"/workspaces/{w}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(WorkspaceItem, response.json())

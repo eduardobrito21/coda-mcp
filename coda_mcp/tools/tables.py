@@ -135,6 +135,18 @@ def register(mcp: FastMCP) -> None:
         )
 
     @mcp.tool()
+    async def get_column(
+        doc_id: str,
+        table_id: str,
+        column_id: str,
+        coda_api_key: str = CodaApiKeyDependency,
+    ) -> ColumnListItem:
+        """Get metadata for a single column by ID or name. Same shape as items from list_columns_typed."""
+        return await coda_client.tables.get_column(
+            doc_id, table_id, column_id, api_key=coda_api_key
+        )
+
+    @mcp.tool()
     async def list_columns_typed(
         doc_id: str, table_id: str, coda_api_key: str = CodaApiKeyDependency
     ) -> list[ColumnListItem]:

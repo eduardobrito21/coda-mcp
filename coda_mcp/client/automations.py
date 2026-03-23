@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models.automations import TriggerAutomationBody, TriggerAutomationResponse
 from coda_mcp.validation import validate_pydantic
 
@@ -32,5 +33,5 @@ class AutomationsClient(CodaRequestMixin):
             json=json_body,
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(TriggerAutomationResponse, response.json())

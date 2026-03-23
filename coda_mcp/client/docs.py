@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models import (
     AclMetadataResponse,
     AclSettingsResponse,
@@ -49,7 +50,7 @@ class DocsClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocsListResponse, response.json())
 
     async def create_doc(self, body: CreateDocBody, *, api_key: str) -> DocDetail:
@@ -58,7 +59,7 @@ class DocsClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocDetail, response.json())
 
     async def get_doc(self, doc_id: str, *, api_key: str) -> DocDetail:
@@ -66,7 +67,7 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocDetail, response.json())
 
     async def patch_doc(self, doc_id: str, body: PatchDocBody, *, api_key: str) -> DocUpdateResult:
@@ -75,7 +76,7 @@ class DocsClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocUpdateResult, response.json())
 
     async def delete_doc(self, doc_id: str, *, api_key: str) -> DocDeleteResult:
@@ -83,7 +84,7 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocDeleteResult, response.json())
 
     async def get_acl_metadata(self, doc_id: str, *, api_key: str) -> AclMetadataResponse:
@@ -91,7 +92,7 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id, "/acl/metadata"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(AclMetadataResponse, response.json())
 
     async def list_permissions(
@@ -106,7 +107,7 @@ class DocsClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PermissionsListResponse, response.json())
 
     async def add_permission(
@@ -117,7 +118,7 @@ class DocsClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(AddPermissionResult, response.json())
 
     async def delete_permission(
@@ -127,7 +128,7 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id, f"/acl/permissions/{quote(permission_id, safe='')}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DeletePermissionResult, response.json())
 
     async def search_principals(
@@ -142,7 +143,7 @@ class DocsClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PrincipalsSearchResponse, response.json())
 
     async def get_acl_settings(self, doc_id: str, *, api_key: str) -> AclSettingsResponse:
@@ -150,7 +151,7 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id, "/acl/settings"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(AclSettingsResponse, response.json())
 
     async def patch_acl_settings(
@@ -165,7 +166,7 @@ class DocsClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(AclSettingsResponse, response.json())
 
     async def list_doc_categories(self, *, api_key: str) -> DocCategoriesResponse:
@@ -173,7 +174,7 @@ class DocsClient(CodaRequestMixin):
             self.url("/categories"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocCategoriesResponse, response.json())
 
     async def publish_doc(
@@ -184,7 +185,7 @@ class DocsClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PublishQueuedResponse, response.json())
 
     async def unpublish_doc(self, doc_id: str, *, api_key: str) -> UnpublishResult:
@@ -192,5 +193,5 @@ class DocsClient(CodaRequestMixin):
             self._doc(doc_id, "/publish"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(UnpublishResult, response.json())

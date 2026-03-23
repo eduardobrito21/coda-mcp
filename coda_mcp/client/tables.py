@@ -3,7 +3,9 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models import (
+    ColumnListItem,
     ColumnsListResponse,
     PushButtonQueuedResponse,
     RowDeleteQueuedResponse,
@@ -43,7 +45,7 @@ class TablesClient(CodaRequestMixin):
             self.url(f"/docs/{d}/tables"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(TablesListResponse, response.json())
 
     async def list_columns(
@@ -55,8 +57,21 @@ class TablesClient(CodaRequestMixin):
             self.url(f"/docs/{d}/tables/{t}/columns"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(ColumnsListResponse, response.json())
+
+    async def get_column(
+        self, doc_id: str, table_id: str, column_id: str, *, api_key: str
+    ) -> ColumnListItem:
+        d = self._doc(doc_id)
+        t = self._seg(table_id)
+        c = self._seg(column_id)
+        response = await self.http.get(
+            self.url(f"/docs/{d}/tables/{t}/columns/{c}"),
+            headers=self._auth_headers(api_key),
+        )
+        raise_coda_http_error(response)
+        return validate_pydantic(ColumnListItem, response.json())
 
     async def get_table_rows(
         self,
@@ -73,7 +88,7 @@ class TablesClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowsListResponse, response.json())
 
     async def post_table_rows(
@@ -93,7 +108,7 @@ class TablesClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowsUpsertQueuedResponse, response.json())
 
     async def get_table(self, doc_id: str, table_id: str, *, api_key: str) -> TableListItem:
@@ -103,7 +118,7 @@ class TablesClient(CodaRequestMixin):
             self.url(f"/docs/{d}/tables/{t}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(TableListItem, response.json())
 
     async def get_row(
@@ -117,7 +132,7 @@ class TablesClient(CodaRequestMixin):
             params={"valueFormat": "simpleWithArrays"},
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowListItem, response.json())
 
     async def update_row(
@@ -137,7 +152,7 @@ class TablesClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True, exclude_none=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowDeleteQueuedResponse, response.json())
 
     async def delete_rows(
@@ -156,7 +171,7 @@ class TablesClient(CodaRequestMixin):
             json=body.model_dump(by_alias=True),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowsDeleteQueuedResponse, response.json())
 
     async def delete_table_row(
@@ -174,7 +189,7 @@ class TablesClient(CodaRequestMixin):
             self.url(f"/docs/{d}/tables/{t}/rows/{r}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(RowDeleteQueuedResponse, response.json())
 
     async def push_button(
@@ -194,5 +209,5 @@ class TablesClient(CodaRequestMixin):
             self.url(f"/docs/{d}/tables/{t}/rows/{r}/buttons/{c}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PushButtonQueuedResponse, response.json())

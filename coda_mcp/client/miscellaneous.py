@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models import (
     AnalyticsUpdatedResponse,
     DocAnalyticsListQuery,
@@ -39,7 +40,7 @@ class MiscellaneousClient(CodaRequestMixin):
             self.url("/whoami"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(WhoamiResponse, response.json())
 
     async def get_resolve_browser_link(
@@ -50,7 +51,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(ResolveBrowserLinkResponse, response.json())
 
     async def get_mutation_status(self, request_id: str, *, api_key: str) -> MutationStatusResponse:
@@ -58,7 +59,7 @@ class MiscellaneousClient(CodaRequestMixin):
             self.url(f"/mutationStatus/{quote(request_id, safe='')}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(MutationStatusResponse, response.json())
 
     async def get_doc_analytics(
@@ -69,7 +70,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocAnalyticsListResponse, response.json())
 
     async def get_page_analytics(
@@ -84,7 +85,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PageAnalyticsListResponse, response.json())
 
     async def get_doc_analytics_summary(
@@ -98,7 +99,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(DocAnalyticsSummaryResponse, response.json())
 
     async def get_pack_analytics(
@@ -109,7 +110,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PackAnalyticsListResponse, response.json())
 
     async def get_pack_analytics_summary(
@@ -123,7 +124,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PackAnalyticsSummaryResponse, response.json())
 
     async def get_pack_formula_analytics(
@@ -138,7 +139,7 @@ class MiscellaneousClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(PackFormulaAnalyticsListResponse, response.json())
 
     async def get_analytics_updated(self, *, api_key: str) -> AnalyticsUpdatedResponse:
@@ -146,5 +147,5 @@ class MiscellaneousClient(CodaRequestMixin):
             self.url("/analytics/updated"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(AnalyticsUpdatedResponse, response.json())

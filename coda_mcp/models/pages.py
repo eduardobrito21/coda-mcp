@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, JsonValue
 
 from .common import ListEnvelope
 
@@ -107,6 +107,93 @@ class PutPageBody(BaseModel):
 
 
 class PageMutationQueuedResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    request_id: str = Field(alias="requestId")
+    id: str
+
+
+# --- GET page / page content (OpenAPI: Page, PageContentList, PageContentDelete) ---
+
+
+class PageTreeReference(BaseModel):
+    """OpenAPI ``PageReference`` (parent/child links on ``Page``)."""
+
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    id: str
+    type: str = "page"
+    href: str
+    browser_link: HttpUrl = Field(alias="browserLink")
+    name: str
+
+
+class PageDetail(BaseModel):
+    """OpenAPI ``Page`` — metadata from ``GET /docs/{docId}/pages/{pageIdOrName}``."""
+
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    id: str
+    type: str = "page"
+    href: str
+    name: str
+    browser_link: HttpUrl = Field(alias="browserLink")
+    is_hidden: bool = Field(alias="isHidden")
+    is_effectively_hidden: bool = Field(alias="isEffectivelyHidden")
+    children: list[PageTreeReference]
+    content_type: str = Field(alias="contentType")
+    subtitle: str | None = None
+    icon: dict[str, JsonValue] | None = None
+    image: dict[str, JsonValue] | None = None
+    parent: PageTreeReference | None = None
+    authors: list[dict[str, JsonValue]] | None = None
+    created_at: str | None = Field(None, alias="createdAt")
+    created_by: dict[str, JsonValue] | None = Field(None, alias="createdBy")
+    updated_at: str | None = Field(None, alias="updatedAt")
+    updated_by: dict[str, JsonValue] | None = Field(None, alias="updatedBy")
+
+
+class PageContentListQuery(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    limit: int | None = None
+    page_token: str | None = Field(None, alias="pageToken")
+    content_format: Literal["plainText"] | None = Field(None, alias="contentFormat")
+
+
+class PageContentItemContent(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    style: str
+    format: str
+    content: str
+    line_level: int | None = Field(None, alias="lineLevel")
+
+
+class PageContentItem(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    id: str
+    type: str
+    item_content: PageContentItemContent = Field(alias="itemContent")
+
+
+class PageContentList(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="ignore")
+
+    items: list[PageContentItem]
+    href: str
+    next_page_token: str | None = Field(None, alias="nextPageToken")
+    next_page_link: str | None = Field(None, alias="nextPageLink")
+
+
+class PageContentDeleteBody(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    element_ids: list[str] | None = Field(None, alias="elementIds")
+
+
+class PageContentDeleteResult(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="ignore")
 
     request_id: str = Field(alias="requestId")

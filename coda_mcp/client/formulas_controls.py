@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import httpx
 
+from coda_mcp.http_errors import raise_coda_http_error
 from coda_mcp.models import (
     ControlDetail,
     ControlsListQuery,
@@ -35,7 +36,7 @@ class FormulasControlsClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(FormulasListResponse, response.json())
 
     async def get_formula(
@@ -46,7 +47,7 @@ class FormulasControlsClient(CodaRequestMixin):
             self.url(f"/docs/{quote(doc_id, safe='')}/formulas/{seg}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(FormulaDetail, response.json())
 
     async def get_controls_list(
@@ -61,7 +62,7 @@ class FormulasControlsClient(CodaRequestMixin):
             params=self.query_dict(query),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(ControlsListResponse, response.json())
 
     async def get_control(
@@ -72,5 +73,5 @@ class FormulasControlsClient(CodaRequestMixin):
             self.url(f"/docs/{quote(doc_id, safe='')}/controls/{seg}"),
             headers=self._auth_headers(api_key),
         )
-        response.raise_for_status()
+        raise_coda_http_error(response)
         return validate_pydantic(ControlDetail, response.json())
