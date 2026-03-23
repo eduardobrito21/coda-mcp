@@ -8,9 +8,16 @@ This server is deployed on **[Prefect Horizon](https://horizon.prefect.io/)** �
 
 **Public endpoint:** `https://coda-io.fastmcp.app/mcp`
 
-**HTTP clients (Horizon, `mcp-remote`, Claude Code HTTP):** send your **[Coda API key](https://coda.io/account)** in the **`X-Coda-Api-Key`** header.
+**HTTP clients:** each request must identify which Coda account to use:
 
-**Local stdio** (`uv run coda-mcp`, Cursor with `env`): set **`CODA_API_KEY`** in the environment (or `.env`); custom headers are not used.
+- **`X-Coda-Api-Key`** header (Claude Desktop + [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), Claude Code, many dev clients).
+- **`?coda_api_key=...`** on the MCP URL — only if your client keeps the query string on every request (keys in URLs are easier to leak; prefer headers when possible).
+
+**Claude web** ([custom connector](https://claude.com/docs/connectors/custom/remote-mcp)) usually only lets you paste a URL — you typically **cannot** set custom headers. Options: put **`?coda_api_key=`** in the saved URL (if the client forwards it), or run a **separate** deployment per friend with their key in **`CODA_API_KEY`** (not ideal). True per-user login needs MCP **OAuth**, which this server does not implement yet.
+
+**Public server, friends use their own Coda keys:** set **`CODA_MCP_HTTP_ALLOW_ENV_API_KEY=false`** (and **do not** set **`CODA_API_KEY`**) on Horizon. Then every HTTP caller **must** send their key via header or query; no shared server key.
+
+**Local stdio** (`uv run coda-mcp`, Cursor with `env`): set **`CODA_API_KEY`** in the environment (or `.env`); headers and query are not used.
 
 ### Claude Desktop (connect to Horizon)
 
