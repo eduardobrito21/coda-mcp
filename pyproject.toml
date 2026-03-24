@@ -1,5 +1,5 @@
 [project]
-name = "coda-io-mcp"
+name = "coda-mcp"
 version = "0.1.0"
 description = "A Coda.io MCP server built with FastMCP"
 readme = "README.md"

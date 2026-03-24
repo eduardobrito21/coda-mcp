@@ -1,15 +1,15 @@
 ---
-name: coda-io-mcp
+name: coda-mcp
 description: >-
-  How to use the coda-io-mcp Model Context Protocol server with Coda.io. Apply
+  How to use the coda-mcp Model Context Protocol server with Coda.io. Apply
   when the user connects this MCP, asks to read/write Coda docs, pages, or
   tables, shares a coda.io URL, or needs workspace sharing, analytics, or
   automations via tools named like list_docs, list_rows, or resolve_link.
 ---
 
-# Coda.io MCP (coda-io-mcp)
+# Coda.io MCP (coda-mcp)
 
-This skill teaches how to drive **coda-io-mcp** tools: a FastMCP server that wraps the **[Coda REST API v1](https://coda.io/apis/v1/openapi.yaml)** so assistants can work with **docs**, **pages**, and **tables** programmatically.
+This skill teaches how to drive **coda-mcp** tools: a FastMCP server that wraps the **[Coda REST API v1](https://coda.io/apis/v1/openapi.yaml)** so assistants can work with **docs**, **pages**, and **tables** programmatically.
 
 ## Coda concepts (short)
 

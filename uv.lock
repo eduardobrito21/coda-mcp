@@ -170,7 +170,7 @@ wheels = [
 ]
 
 [[package]]
-name = "coda-io-mcp"
+name = "coda-mcp"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

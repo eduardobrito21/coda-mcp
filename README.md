@@ -1,4 +1,4 @@
-# coda-io-mcp
+# coda-mcp
 
 A Coda.io MCP server built with FastMCP — expose your Coda docs, pages, and tables to any MCP client.
 
@@ -135,8 +135,8 @@ Add `--scope project` or `--scope user` if you want a specific config location.
 Clone the repo and install dependencies with [uv](https://docs.astral.sh/uv/):
 
 ```bash
-git clone https://github.com/<user>/coda-io-mcp
-cd coda-io-mcp
+git clone https://github.com/<user>/coda-mcp
+cd coda-mcp
 uv sync
 cp .env.example .env
 # set CODA_API_KEY in .env for local runs
@@ -168,7 +168,7 @@ Failed Coda requests (including **401** and **403** from a missing, invalid, or 
   "mcpServers": {
     "coda-io-local": {
       "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/coda-io-mcp", "coda-mcp"],
+      "args": ["run", "--directory", "/absolute/path/to/coda-mcp", "coda-mcp"],
       "env": {
         "CODA_API_KEY": "YOUR_CODA_API_KEY"
       }
@@ -181,7 +181,7 @@ Failed Coda requests (including **401** and **403** from a missing, invalid, or 
 
 ```bash
 claude mcp add --transport stdio --env CODA_API_KEY=YOUR_CODA_API_KEY coda-io-local -- \
-  uv run --directory /path/to/coda-io-mcp coda-mcp
+  uv run --directory /path/to/coda-mcp coda-mcp
 ```
 
 ## Example prompts
